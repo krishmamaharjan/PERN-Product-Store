@@ -7,6 +7,8 @@ import {aj} from "./lib/Arcjet.js";
 import productRoutes from "./routes/product.route.js"
 const app = express();
 
+const PORT = process.env.PORT
+
 app.use(express.json());
 app.use(cors());
 app.use(helmet());  //helmet is a security midddleware that helps t protect app by setting various HTTP headers.
@@ -64,7 +66,7 @@ async function initDB() {
 }
 
 initDB().then(() => {
-    app.listen(3000, () => {
-    console.log("Server is running on port 3000");
+    app.listen(PORT, () => {
+    console.log("Server is running on port", PORT);
 });
 })
