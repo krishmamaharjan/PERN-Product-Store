@@ -5,13 +5,18 @@ import cors from "cors";
 import { sql } from "./config/db.js";
 import {aj} from "./lib/Arcjet.js";
 import productRoutes from "./routes/product.route.js"
+import path from "path";
 const app = express();
 
 const PORT = process.env.PORT
 
 app.use(express.json());
 app.use(cors());
-app.use(helmet());  //helmet is a security midddleware that helps t protect app by setting various HTTP headers.
+app.use(helmet(
+    {
+        contentSecurityPolicy: false,
+    }
+));  //helmet is a security midddleware that helps t protect app by setting various HTTP headers.
 app.use(morgan("dev"));  //log the request
 
 // apply arcjet rate-limit to all routes
@@ -36,7 +41,8 @@ app.use(async (req,res,next) => {
         }
         // check or spoofed bots
         
-        next();if(decision.results.some((result) => result.reason.isBot() && result.reason.isSpoofed())){
+        next();
+        if(decision.results.some((result) => result.reason.isBot() && result.reason.isSpoofed())){
             res.status(403).json({error: "Spoofed bot detected"});
             return;
         }
@@ -46,7 +52,19 @@ app.use(async (req,res,next) => {
     }
 });
 
-app.use("/api/products", productRoutes);
+// routes
+app.use("/api/products/", productRoutes);
+
+// For deployment
+const __dirname = path.resolve();
+
+if(process.env.NODE_ENV==="production")
+{
+    app.use(express.static(path.join(__dirname,"/frontend/dist")))
+    app.get(/.*/, (req,res) => {
+        res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+    })
+}
 
 async function initDB() {
     try {
