@@ -30,7 +30,7 @@ A full-stack **PERN (PostgreSQL, Express.js, React.js, Node.js)** application fo
 
 ## Learning Journey  
 
-This project was built during my **60 Days of Learning Challenge at Leapfrog Technology** 🚀.  
+This project was built during my **60 Days of Learning Challenge at Leapfrog Technology**.  
 - Learned how to design and query databases with **PostgreSQL**  
 - Practiced frontend development with **React.js** and **Tailwind CSS**  
 - Built REST APIs using **Express.js** and connected them with PostgreSQL  
